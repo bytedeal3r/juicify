@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { Heart, MoreVertical, Check } from 'lucide-react'
 import { usePlayerStore } from '@/store/player.store'
 import { useLibraryStore } from '@/store/library.store'
 import { useUIStore } from '@/store/ui.store'
@@ -102,15 +103,15 @@ export function SongRow({ song, index, queue, source }: Props) {
       >
         {/* Index / play button */}
         <div className="w-8 flex items-center justify-center flex-shrink-0">
-          <button onClick={handlePlay} className="text-sm">
+          <button onClick={handlePlay} className="flex items-center justify-center">
             {isCurrentTrack && isPlaying ? (
-              <span className="text-[#bf5fff]">⏸</span>
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" className="text-[#bf5fff]"><rect x="1" y="1" width="4" height="10" rx="1"/><rect x="7" y="1" width="4" height="10" rx="1"/></svg>
             ) : (
               <>
-                <span className={`group-hover:hidden ${isCurrentTrack ? 'text-[#bf5fff]' : 'text-[#606078]'}`}>
+                <span className={`group-hover:hidden text-xs ${isCurrentTrack ? 'text-[#bf5fff]' : 'text-[#606078]'}`}>
                   {index !== undefined ? index + 1 : '•'}
                 </span>
-                <span className="hidden group-hover:inline text-white">▶</span>
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" className="hidden group-hover:block text-white"><polygon points="2,1 11,6 2,11"/></svg>
               </>
             )}
           </button>
@@ -140,25 +141,25 @@ export function SongRow({ song, index, queue, source }: Props) {
         {/* Like button (desktop hover) */}
         <button
           onClick={(e) => { e.stopPropagation(); toggleLike(song.id) }}
-          className={`opacity-0 group-hover:opacity-100 transition-all text-sm hidden sm:block ${
+          className={`opacity-0 group-hover:opacity-100 transition-all hidden sm:block ${
             isLiked(song.id) ? 'opacity-100 text-[#00ff88]' : 'text-[#606078] hover:text-white'
           }`}
         >
-          ♥
+          <Heart size={14} fill={isLiked(song.id) ? 'currentColor' : 'none'} />
         </button>
 
         {/* Three-dot menu (mobile) / queued feedback */}
         {queued ? (
-          <span className="sm:hidden text-[#00ff88] text-xs">✓</span>
+          <span className="sm:hidden text-[#00ff88]"><Check size={14} /></span>
         ) : (
           <button
             onClick={(e) => {
               e.stopPropagation()
               openContextMenu(song, { x: e.currentTarget.getBoundingClientRect().left, y: e.currentTarget.getBoundingClientRect().top })
             }}
-            className="sm:hidden text-[#606078] hover:text-white px-1 text-lg leading-none"
+            className="sm:hidden text-[#606078] hover:text-white px-1"
           >
-            ⋮
+            <MoreVertical size={16} />
           </button>
         )}
 

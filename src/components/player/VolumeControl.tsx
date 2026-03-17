@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react'
+import { Volume2, Volume1, VolumeX } from 'lucide-react'
 import { usePlayerStore } from '@/store/player.store'
 
 export function VolumeControl() {
@@ -6,8 +7,8 @@ export function VolumeControl() {
   const [popupOpen, setPopupOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
-  const icon = isMuted || volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊'
   const display = isMuted ? 0 : volume
+  const VolumeIcon = isMuted || volume === 0 ? VolumeX : volume < 0.5 ? Volume1 : Volume2
 
   useEffect(() => {
     if (!popupOpen) return
@@ -26,19 +27,17 @@ export function VolumeControl() {
 
   return (
     <div ref={ref} className="relative flex items-center gap-2">
-      {/* Speaker button — on mobile opens popup, on desktop just mutes */}
       <button
         onClick={() => {
-          // On small screens toggle popup; on larger screens just mute
           if (window.innerWidth < 768) {
             setPopupOpen((o) => !o)
           } else {
             toggleMute()
           }
         }}
-        className="text-[#606078] hover:text-white transition-colors w-5 text-center flex-shrink-0"
+        className="text-[#606078] hover:text-white transition-colors flex-shrink-0"
       >
-        {icon}
+        <VolumeIcon size={16} />
       </button>
 
       {/* Horizontal slider — desktop only */}
@@ -68,11 +67,8 @@ export function VolumeControl() {
               className="accent-[#bf5fff] cursor-pointer"
             />
           </div>
-          <button
-            onClick={toggleMute}
-            className="text-[#606078] hover:text-white transition-colors text-sm"
-          >
-            {icon}
+          <button onClick={toggleMute} className="text-[#606078] hover:text-white transition-colors">
+            <VolumeIcon size={14} />
           </button>
         </div>
       )}

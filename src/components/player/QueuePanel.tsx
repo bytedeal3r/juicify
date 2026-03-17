@@ -1,3 +1,4 @@
+import { X, Trash2 } from 'lucide-react'
 import { usePlayerStore } from '@/store/player.store'
 import { getFallbackCover } from '@/utils/coverArt'
 
@@ -13,16 +14,13 @@ export function QueuePanel() {
         <div className="flex items-center gap-3">
           <button
             onClick={clearQueue}
-            className="text-[#606078] hover:text-red-400 transition-colors text-xs"
+            className="text-[#606078] hover:text-red-400 transition-colors"
             title="Clear queue"
           >
-            Clear
+            <Trash2 size={14} />
           </button>
-          <button
-            onClick={toggleQueue}
-            className="text-[#606078] hover:text-white transition-colors"
-          >
-            ✕
+          <button onClick={toggleQueue} className="text-[#606078] hover:text-white transition-colors">
+            <X size={16} />
           </button>
         </div>
       </div>
