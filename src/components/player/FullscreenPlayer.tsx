@@ -2,7 +2,6 @@ import { useRef, useEffect } from 'react'
 import { usePlayerStore } from '@/store/player.store'
 import { useLibraryStore } from '@/store/library.store'
 import { ProgressSlider } from './ProgressSlider'
-import { VolumeControl } from './VolumeControl'
 import { getFallbackCover } from '@/utils/coverArt'
 
 export function FullscreenPlayer() {
@@ -17,7 +16,9 @@ export function FullscreenPlayer() {
     prev,
     setPlayMode,
     toggleFullscreen,
+    toggleQueue,
     isFullscreen,
+    isQueueOpen,
   } = usePlayerStore()
   const { isLiked, toggleLike } = useLibraryStore()
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -35,12 +36,18 @@ export function FullscreenPlayer() {
     <div className="fixed inset-0 z-50 bg-[#0a0a0f] flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4">
-        <button onClick={toggleFullscreen} className="text-[#a0a0b8] hover:text-white transition-colors">
-          ⌄ Now Playing
+        <button
+          onClick={toggleFullscreen}
+          className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors text-[#a0a0b8] hover:text-white"
+        >
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 6l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
+        <span className="text-[#a0a0b8] text-xs font-medium tracking-widest uppercase">Now Playing</span>
         <button
           onClick={() => toggleLike(currentTrack.id)}
-          className={`text-xl transition-colors ${isLiked(currentTrack.id) ? 'text-[#00ff88]' : 'text-[#606078]'}`}
+          className={`text-xl transition-colors ${isLiked(currentTrack.id) ? 'text-[#00ff88]' : 'text-[#606078] hover:text-white'}`}
         >
           ♥
         </button>
@@ -73,9 +80,10 @@ export function FullscreenPlayer() {
         <div className="flex items-center justify-between">
           <button
             onClick={cycleModes}
+            title={playMode}
             className={`text-lg transition-colors ${playMode !== 'normal' ? 'text-[#bf5fff]' : 'text-[#606078]'}`}
           >
-            {playMode === 'shuffle' ? '⇀' : playMode === 'repeat-one' ? '↺₁' : '↺'}
+            {{ normal: '⇄', shuffle: '⇀', 'repeat-one': '↺₁', 'repeat-all': '↺' }[playMode]}
           </button>
           <button onClick={prev} className="text-white text-3xl">⏮</button>
           <button
@@ -90,7 +98,13 @@ export function FullscreenPlayer() {
             )}
           </button>
           <button onClick={next} className="text-white text-3xl">⏭</button>
-          <VolumeControl />
+          <button
+            onClick={() => { toggleQueue(); toggleFullscreen() }}
+            className={`text-xl transition-colors ${isQueueOpen ? 'text-[#bf5fff]' : 'text-[#606078]'}`}
+            title="Queue"
+          >
+            ≡
+          </button>
         </div>
 
         {/* Notes/Lyrics */}
