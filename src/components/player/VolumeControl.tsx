@@ -1,25 +1,81 @@
+import { useRef, useState, useEffect } from 'react'
 import { usePlayerStore } from '@/store/player.store'
 
 export function VolumeControl() {
   const { volume, isMuted, setVolume, toggleMute } = usePlayerStore()
+  const [popupOpen, setPopupOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  const icon = isMuted || volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊'
+  const display = isMuted ? 0 : volume
+
+  useEffect(() => {
+    if (!popupOpen) return
+    const handler = (e: MouseEvent | TouchEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setPopupOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handler)
+    document.addEventListener('touchstart', handler)
+    return () => {
+      document.removeEventListener('mousedown', handler)
+      document.removeEventListener('touchstart', handler)
+    }
+  }, [popupOpen])
 
   return (
-    <div className="flex items-center gap-2">
+    <div ref={ref} className="relative flex items-center gap-2">
+      {/* Speaker button — on mobile opens popup, on desktop just mutes */}
       <button
-        onClick={toggleMute}
-        className="text-[#606078] hover:text-white transition-colors w-5 text-center"
+        onClick={() => {
+          // On small screens toggle popup; on larger screens just mute
+          if (window.innerWidth < 768) {
+            setPopupOpen((o) => !o)
+          } else {
+            toggleMute()
+          }
+        }}
+        className="text-[#606078] hover:text-white transition-colors w-5 text-center flex-shrink-0"
       >
-        {isMuted || volume === 0 ? '🔇' : volume < 0.5 ? '🔉' : '🔊'}
+        {icon}
       </button>
+
+      {/* Horizontal slider — desktop only */}
       <input
         type="range"
         min={0}
         max={1}
         step={0.02}
-        value={isMuted ? 0 : volume}
+        value={display}
         onChange={(e) => setVolume(Number(e.target.value))}
-        className="w-20 accent-[#bf5fff] cursor-pointer"
+        className="hidden md:block w-20 accent-[#bf5fff] cursor-pointer"
       />
+
+      {/* Vertical popup — mobile only */}
+      {popupOpen && (
+        <div className="absolute bottom-full mb-3 left-1/2 -translate-x-1/2 bg-[#1a1a28] border border-white/10 rounded-xl px-3 py-4 flex flex-col items-center gap-2 z-50 shadow-xl">
+          <span className="text-[10px] text-[#606078]">{Math.round(display * 100)}%</span>
+          <div className="h-24 flex items-center justify-center">
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.02}
+              value={display}
+              onChange={(e) => setVolume(Number(e.target.value))}
+              style={{ writingMode: 'vertical-lr', direction: 'rtl', width: '4px', height: '96px' }}
+              className="accent-[#bf5fff] cursor-pointer"
+            />
+          </div>
+          <button
+            onClick={toggleMute}
+            className="text-[#606078] hover:text-white transition-colors text-sm"
+          >
+            {icon}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
