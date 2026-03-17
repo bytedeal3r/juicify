@@ -4,6 +4,7 @@ import { usePlayerStore } from '@/store/player.store'
 import { useLibraryStore } from '@/store/library.store'
 import { SongRow } from '@/components/cards/SongRow'
 import { Skeleton } from '@/components/ui/Skeleton'
+import { RadioButton } from '@/components/ui/RadioButton'
 import type { DBSong } from '@/types/db.types'
 
 export function LikedSongs() {
@@ -27,14 +28,17 @@ export function LikedSongs() {
       >
         <h1 className="text-3xl font-black text-white mb-1">Liked Songs</h1>
         <p className="text-[#a0a0b8]">{songs.length} songs</p>
-        {songs.length > 0 && (
-          <button
-            onClick={() => playAlbum(songs, 0, 'liked')}
-            className="mt-4 px-6 py-2.5 bg-[#00ff88] text-black rounded-xl font-semibold text-sm hover:bg-[#00ff88]/90 transition-colors"
-          >
-            ▶ Play All
-          </button>
-        )}
+        <div className="mt-4 flex items-center gap-3 flex-wrap">
+          {songs.length > 0 && (
+            <button
+              onClick={() => playAlbum(songs, 0, 'liked')}
+              className="px-6 py-2.5 bg-[#00ff88] text-black rounded-xl font-semibold text-sm hover:bg-[#00ff88]/90 transition-colors"
+            >
+              ▶ Play All
+            </button>
+          )}
+          <RadioButton />
+        </div>
       </div>
 
       {loading ? (

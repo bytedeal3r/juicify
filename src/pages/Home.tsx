@@ -5,6 +5,7 @@ import { useHistoryStore } from '@/store/history.store'
 import { AlbumCard } from '@/components/cards/AlbumCard'
 import { RecentlyPlayed } from '@/components/home/RecentlyPlayed'
 import { WeeklyPlaylist } from '@/components/home/WeeklyPlaylist'
+import { RadioButton } from '@/components/ui/RadioButton'
 import { Skeleton } from '@/components/ui/Skeleton'
 import type { DBAlbum } from '@/types/db.types'
 
@@ -50,6 +51,11 @@ export function Home() {
 
       <WeeklyPlaylist />
       <RecentlyPlayed />
+
+      {/* Radio — visible on mobile */}
+      <section className="md:hidden">
+        <RadioButton variant="card" />
+      </section>
 
       {/* Official Albums */}
       <section>
