@@ -21,7 +21,6 @@ const proxyOptions = {
 
 app.use('/juicewrld', createProxyMiddleware(proxyOptions))
 app.use('/files',     createProxyMiddleware(proxyOptions))
-app.use('/assets',    createProxyMiddleware(proxyOptions))
 
 // Serve built frontend in production
 const distPath = join(__dirname, 'dist')
