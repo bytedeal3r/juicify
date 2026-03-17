@@ -39,7 +39,7 @@ export function PlayerBar() {
     <div className="fixed bottom-16 md:bottom-0 left-0 right-0 z-20 bg-[#0a0a0f]/95 backdrop-blur-md border-t border-white/5">
       <ProgressSlider compact />
 
-      <div className="flex items-center px-4 py-2 gap-2">
+      <div className="flex items-center px-4 pt-2 pb-3 gap-2">
 
         {/* Left — track info */}
         <div className="flex-1 min-w-0">
