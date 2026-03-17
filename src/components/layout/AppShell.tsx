@@ -34,7 +34,7 @@ export function AppShell() {
 
       {/* Main content */}
       <main
-        className={`flex-1 overflow-y-auto transition-all ${
+        className={`flex-1 overflow-y-auto transition-all pb-36 md:pb-24 ${
           isQueueOpen ? 'mr-72' : ''
         }`}
       >
